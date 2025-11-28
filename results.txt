@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+# --------------------------------------------------------
+# Archivo: primos_a_archivo_sh.py
+# Propósito: Encontrar e imprimir números primos entre 1 y 250,
+#            y almacenar los resultados en 'results.txt'.
+# --------------------------------------------------------
+
+import os
+
+def es_primo(numero):
+    """Verifica si un número dado es primo."""
+    if numero < 2:
+        return False
+    # La optimización: solo se verifica hasta la raíz cuadrada del número.
+    for i in range(2, int(numero**0.5) + 1):
+        if numero % i == 0:
+            return False
+    return True
+
+def encontrar_y_guardar_primos(limite, nombre_archivo):
+    """
+    Busca números primos hasta el límite dado y guarda los resultados 
+    en el archivo especificado.
+    """
+    primos_encontrados = []
+    
+    # Recorrer el rango de 1 al límite (250)
+    for num in range(1, limite + 1):
+        if es_primo(num):
+            primos_encontrados.append(str(num))
+
+    # Escritura en el archivo
+    try:
+        with open(nombre_archivo, "w") as archivo:
+            # Unir los números primos con saltos de línea para un formato limpio
+            contenido = "\n".join(primos_encontrados)
+            archivo.write(contenido)
+        
+        # Obtener la ruta absoluta del archivo para el mensaje final
+        ruta_absoluta = os.path.abspath(nombre_archivo)
+
+        print("-" * 50)
+        print("Script completado con éxito.")
+        print(f"Se encontraron **{len(primos_encontrados)}** números primos entre 1 y {limite}.")
+        print(f"Resultados guardados en: {nombre_archivo}")
+        print(f"Ruta Absoluta: {ruta_absoluta}")
+        print("-" * 50)
+
+    except IOError as e:
+        print(f" ERROR: No se pudo escribir en el archivo {nombre_archivo}. Detalles: {e}")
+
+
+# --- Ejecución Principal ---
+LIMITE_SUPERIOR = 250
+NOMBRE_ARCHIVO = "results.txt"
+
+if __name__ == "__main__":
+    encontrar_y_guardar_primos(LIMITE_SUPERIOR, NOMBRE_ARCHIVO)
